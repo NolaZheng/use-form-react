@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { debounce } from '../helper/debounce'
 
 export default function useForm({ initialValues, validation, onSubmit }) {
   const [values, setValues] = useState(initialValues)
@@ -13,14 +14,14 @@ export default function useForm({ initialValues, validation, onSubmit }) {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = debounce(() => {
     const e = validation(values)
     setErrors(e)
 
     if (e.account || e.password) return
 
     onSubmit(values)
-  }
+  })
 
   return { handleChange, handleSubmit, values, errors }
 }
